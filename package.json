@@ -1,12 +1,12 @@
 {
 	"name": "resilient-mailer-mailgun",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Mailgun provider implementation for resilient-mailer",
 
 	"license": "MIT",
 	"author": "James Billingham <james@jamesbillingham.com> (http://jamesbillingham.com)",
 
-	"main": "main.js",
+	"main": "lib/mailgun-provider.js",
 
 	"repository": {
 		"type": "git",
