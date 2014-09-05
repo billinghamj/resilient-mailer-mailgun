@@ -20,13 +20,20 @@ $ npm install resilient-mailer-mailgun
 
 ## Usage
 
-Create an instance of the provider. Optionally, you can enable
-[test mode](http://documentation.mailgun.com/user_manual.html#sending-in-test-mode).
+Create an instance of the provider. There are also a number of options you can
+alter:
 
 ```js
 var MailgunProvider = require('resilient-mailer-mailgun');
 
-var mailgun = new MailgunProvider('example.com', 'key-MyApiKey', { testMode: true });
+var options = {
+	testMode: true, // see: http://documentation.mailgun.com/user_manual.html#sending-in-test-mode
+	apiSecure: false, // allows the use of HTTP rather than HTTPS
+	apiHostname: 'api.mailgun.example.com', // allows alternative hostname
+	apiPort: 8080 // allows unusual ports
+};
+
+var mailgun = new MailgunProvider('example.com', 'key-MyApiKey', options);
 ```
 
 To register the provider with your `ResilientMailer` instance:
