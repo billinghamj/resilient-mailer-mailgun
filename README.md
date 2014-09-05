@@ -27,10 +27,10 @@ alter:
 var MailgunProvider = require('resilient-mailer-mailgun');
 
 var options = {
-	testMode: true, // see: http://documentation.mailgun.com/user_manual.html#sending-in-test-mode
-	apiSecure: false, // allows the use of HTTP rather than HTTPS
-	apiHostname: 'api.mailgun.example.com', // allows alternative hostname
-	apiPort: 8080 // allows unusual ports
+	testMode: true,           // see: http://documentation.mailgun.com/user_manual.html#sending-in-test-mode
+	apiSecure: false,         // allows the use of HTTP rather than HTTPS
+	apiHostname: '127.0.0.1', // allows alternative hostname
+	apiPort: 8080             // allows unusual ports
 };
 
 var mailgun = new MailgunProvider('example.com', 'key-MyApiKey', options);
