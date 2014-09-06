@@ -3,6 +3,10 @@
 `resilient-mailer-mailgun` implements Mailgun as an email provider for
 [`resilient-mailer`](https://github.com/billinghamj/resilient-mailer).
 
+[![NPM Version](https://img.shields.io/npm/v/resilient-mailer-mailgun.svg?style=flat)](https://www.npmjs.org/package/resilient-mailer-mailgun)
+[![Build Status](https://img.shields.io/travis/billinghamj/resilient-mailer-mailgun.svg?style=flat)](https://travis-ci.org/billinghamj/resilient-mailer-mailgun)
+[![Coverage Status](https://img.shields.io/coveralls/billinghamj/resilient-mailer-mailgun.svg?style=flat)](https://coveralls.io/r/billinghamj/resilient-mailer-mailgun)
+
 ```js
 var MailgunProvider = require('resilient-mailer-mailgun');
 
