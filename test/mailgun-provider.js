@@ -1,5 +1,6 @@
 var test = require('tape');
 var http = require('http');
+var multiparty = require('multiparty');
 var MailgunProvider = require('../lib/mailgun-provider');
 
 test('correct types exported', function (t) {
@@ -41,6 +42,70 @@ test('invalid message returns error', function (t) {
 	provider.mail(null, function (error) { t.notEqual(typeof error, 'undefined'); });
 	provider.mail({}, function (error) { t.notEqual(typeof error, 'undefined'); });
 	provider.mail({to:['']}, function (error) { t.notEqual(typeof error, 'undefined'); });
+});
+
+test('api used correctly when successful', function (t) {
+	var domain = 'example.com';
+	var apiKey = 'CuKLNA-awa4skvmqOWTHtCF'; // arbitrary
+
+	var message = {
+		from: 'no-reply@example.com',
+		to: ['user@example.net', 'user@example.org'],
+		cc: ['user2@example.net'],
+		bcc: ['user3@example.net'],
+		replyto: 'info@example.com',
+		subject: 'testing, 123...',
+		textBody: 'please disregard',
+		htmlBody: '<p>please disregard</p>'
+	};
+
+	var expectedObject = {
+		'from': ['no-reply@example.com'],
+		'to': ['user@example.net,user@example.org'],
+		'subject': ['testing, 123...'],
+		'h:Reply-To': ['info@example.com'],
+		'cc': ['user2@example.net'],
+		'bcc': ['user3@example.net'],
+		'text': ['please disregard'],
+		'html': ['<p>please disregard</p>'],
+		'o:testmode': ['true']
+	};
+
+	t.plan(5);
+
+	var server = setupTestServer(t, domain,
+		function (request, response) {
+			var form = new multiparty.Form();
+
+			var auth = request.headers['authorization'];
+			var basic = new Buffer('api:' + apiKey).toString('base64');
+
+			t.equals(auth, 'Basic ' + basic);
+
+			form.parse(request, function (err, fields, files) {
+				t.deepEquals(fields, expectedObject);
+			});
+
+			response.writeHead(200);
+			response.end();
+		},
+
+		function (addr) {
+			var options = {
+				apiSecure: false,
+				apiHostname: addr.address,
+				apiPort: addr.port,
+				testMode: true
+			};
+
+			var provider = new MailgunProvider(domain, apiKey, options);
+
+			provider.mail(message, function (error) {
+				t.equal(typeof error, 'undefined');
+
+				server.close();
+			});
+		});
 });
 
 test('handles api errors correctly', function (t) {
