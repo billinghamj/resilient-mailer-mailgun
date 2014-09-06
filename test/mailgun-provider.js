@@ -60,8 +60,8 @@ test('handles api errors correctly', function (t) {
 	t.plan(4);
 
 	var server = setupTestServer(t, domain,
-		function (request, response, body) {
-			var error = JSON.stringify({status:'error', message:'generic fail'});
+		function (request, response) {
+			var error = JSON.stringify({ message: 'generic fail' });
 
 			response.writeHead(503, { 'Content-Length': error.length });
 			response.write(error);
@@ -103,8 +103,8 @@ test('check lack of callback', function (t) {
 	t.plan(2);
 
 	var server = setupTestServer(t, domain,
-		function (request, response, body) {
-			var error = JSON.stringify({ message:'generic fail' });
+		function (request, response) {
+			var error = JSON.stringify({ message: 'generic fail' });
 
 			response.writeHead(503, { 'Content-Length': error.length });
 			response.write(error);
@@ -132,15 +132,7 @@ function setupTestServer(t, domain, handler, callback) {
 		t.equal(request.method, 'POST');
 		t.equal(request.url, '/v2/' + domain + '/messages');
 
-		body = '';
-
-		request.on('data', function (chunk) {
-			body += chunk;
-		});
-
-		request.on('end', function () {
-			handler(request, response, body);
-		});
+		handler(request, response);
 	});
 
 	server.listen(function () {
